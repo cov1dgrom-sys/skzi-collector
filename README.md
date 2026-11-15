@@ -263,7 +263,7 @@ build.cmd test
 ## Структура
 
 ```
-TEAM2/
+main/
 ├── build.cmd                 сборка и тесты без Visual Studio
 ├── release.cmd               выпуск релиза: установщики, ZIP, SHA-256 в dist\
 ├── SkziCollector.sln         решение Visual Studio
