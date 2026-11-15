@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Конфигурация агента сбора данных о СКЗИ (кладётся рядом с SkziAgent.exe на каждом сканируемом ПК).
+	При установке агента из панели управления этот файл формируется автоматически из настроек панели.
+-->
+<AgentConfig>
+	<!-- TCP-порт, на котором агент ждёт запросы панели управления -->
+	<ListenPort>50555</ListenPort>
+
+	<!-- Общий секретный ключ: должен совпадать с ключом в настройках панели. ОБЯЗАТЕЛЬНО смените! -->
+	<SharedKey>RedFlag-SKZI-ChangeMe</SharedKey>
+
+	<!-- Разрешённые адреса панели управления (IP или имя). Пусто — любые, при условии верного ключа. -->
+	<AllowedClients>
+		<!-- <Client>192.168.1.10</Client> -->
+	</AllowedClients>
+
+	<!--
+		Директории для сканирования файлов сертификатов.
+		Recursive="true" — с подпапками. Поддерживаются маски (C:\Users\*\Desktop)
+		и переменные окружения (%USERPROFILE%, %ProgramData%).
+	-->
+	<ScanDirectories>
+		<Directory Recursive="true">C:\Certs</Directory>
+		<Directory Recursive="true">C:\Users\*\Desktop</Directory>
+		<Directory Recursive="true">C:\Users\*\Documents</Directory>
+		<Directory Recursive="true">C:\Users\*\Downloads</Directory>
+	</ScanDirectories>
+
+	<!--
+		Расширения файлов сертификатов (список настраивается).
+		.p12/.pfx агент без пароля не открывает: такие файлы попадают в предупреждения.
+	-->
+	<CertificateFileExtensions>.cer;.crt;.der;.pem;.cert;.p7b;.p7c;.p12;.pfx</CertificateFileExtensions>
+
+	<!-- Сканировать хранилища «Личное» Windows: всех пользователей ПК (в т.ч. не вошедших в систему) и компьютера -->
+	<ScanCertificateStores>true</ScanCertificateStores>
+
+	<!-- Искать сертификаты в ключевых контейнерах КриптоПро CSP (реестр, флешки, токены) — через CryptoAPI, без PIN-кода -->
+	<ScanCryptoProContainers>true</ScanCryptoProContainers>
+
+	<!-- Файлы больше этого размера (КБ) пропускаются -->
+	<MaxCertificateFileSizeKb>2048</MaxCertificateFileSizeKb>
+
+	<!--
+		Принимать папки для поиска от панели управления. Если в панели включено «Агенты ищут только в этих папках»,
+		папки из этого файла не используются — папки задаёт тот, кто собирает сертификаты.
+	-->
+	<AcceptDirectoriesFromPanel>true</AcceptDirectoriesFromPanel>
+
+	<!-- Журнал: папка (относительно exe или полный путь), срок хранения в сутках и размер одного файла в МБ (0 — без ограничения) -->
+	<LogDirectory>logs</LogDirectory>
+	<LogRetentionDays>30</LogRetentionDays>
+	<LogMaxFileSizeMb>10</LogMaxFileSizeMb>
+
+	<!--
+		Только для автономного режима (разовое сканирование с записью в MSSQL без панели, см. README):
+		Server=SQLSRV\SQLEXPRESS;Database=SkziInventory;Integrated Security=true
+	-->
+	<DatabaseConnectionString></DatabaseConnectionString>
+	<DatabaseTableName>dbo.SkziCertificates</DatabaseTableName>
+</AgentConfig>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8E2C4A5D-1B7F-4C6E-B3A9-2D5F7E9C1A22}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Skzi.ControlPanel</RootNamespace>
+    <AssemblyName>SkziControlPanel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <LangVersion>5</LangVersion>
+    <CodePage>65001</CodePage>
+    <FileAlignment>512</FileAlignment>
+    <Prefer32Bit>false</Prefer32Bit>
+    <ApplicationIcon>..\Assets\skzi.ico</ApplicationIcon>
+    <ApplicationManifest>..\Assets\app.manifest</ApplicationManifest>
+    <OutputPath>..\..\bin\</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Общий код (логирование, парсинг, сканирование, протокол, БД) подключается ссылками на файлы -->
+    <Compile Include="..\Common\**\*.cs">
+      <Link>Common\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="AgentDeployer.cs" />
+    <Compile Include="Dialogs.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Database.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.Scan.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.Settings.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="ScanCoordinator.cs" />
+    <Compile Include="UiStyle.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\config\panel.config.xml">
+      <Link>panel.config.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Assets\app.manifest">
+      <Link>app.manifest</Link>
+    </None>
+    <EmbeddedResource Include="..\Assets\grfc-logo-white.png">
+      <LogicalName>Skzi.ControlPanel.GrfcLogo.png</LogicalName>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Агент кладётся рядом с панелью: нужен для установки агента на ПК из панели -->
+    <ProjectReference Include="..\SkziAgent\SkziAgent.csproj">
+      <Project>{5B0D7C1E-6F43-4F3A-9A2E-1C7D0F8A3B11}</Project>
+      <Name>SkziAgent</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

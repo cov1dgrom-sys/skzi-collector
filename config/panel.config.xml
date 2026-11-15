@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Конфигурация панели управления (кладётся рядом с SkziControlPanel.exe).
+	Все параметры редактируются на вкладке «Настройки»; после сохранения из панели комментарии в файле не сохраняются.
+-->
+<PanelConfig>
+	<!-- Подключение к Microsoft SQL Server -->
+	<Database>
+		<!-- Пусто — при запуске панель сама найдёт SQL Server на этом ПК (Express, Developer, LocalDB). Можно указать явно: localhost\SQLEXPRESS -->
+		<Server></Server>
+		<DatabaseName>SkziInventory</DatabaseName>
+		<UseWindowsAuthentication>true</UseWindowsAuthentication>
+		<UserName></UserName>
+		<!-- Пароль задаётся в панели и хранится зашифрованным (DPAPI текущего пользователя) -->
+		<ProtectedPassword></ProtectedPassword>
+		<TableName>dbo.SkziCertificates</TableName>
+		<CreateDatabaseIfMissing>true</CreateDatabaseIfMissing>
+		<ConnectTimeoutSeconds>15</ConnectTimeoutSeconds>
+	</Database>
+
+	<!-- Агенты на сканируемых ПК -->
+	<AgentPort>50555</AgentPort>
+	<SharedKey>RedFlag-SKZI-ChangeMe</SharedKey>
+	<AgentTimeoutSeconds>180</AgentTimeoutSeconds>
+	<MaxParallelScans>8</MaxParallelScans>
+	<SendDirectoriesToAgents>true</SendDirectoriesToAgents>
+	<!-- Агенты ищут только в папках, указанных в панели (папки из agent.config.xml не используются) -->
+	<AgentsUseOnlyPanelDirectories>true</AgentsUseOnlyPanelDirectories>
+	<AgentInstallPath>C:\Program Files\SkziAgent</AgentInstallPath>
+
+	<!-- Сразу записывать результаты сканирования в БД -->
+	<SaveToDatabaseAfterScan>true</SaveToDatabaseAfterScan>
+
+	<!-- Способ сканирования по умолчанию: Agent или Agentless -->
+	<DefaultScanMode>Agent</DefaultScanMode>
+
+	<!--
+		Папки для поиска файлов сертификатов: их указывает тот, кто собирает сертификаты
+		(кнопка «Папки для поиска…» на вкладке «Сканирование ПК»). Используются в режимах «Этот ПК» и без агента, передаются агентам.
+	-->
+	<ScanDirectories>
+		<Directory Recursive="true">C:\Certs</Directory>
+		<Directory Recursive="true">C:\Users\*\Desktop</Directory>
+		<Directory Recursive="true">C:\Users\*\Documents</Directory>
+		<Directory Recursive="true">C:\Users\*\Downloads</Directory>
+	</ScanDirectories>
+	<CertificateFileExtensions>.cer;.crt;.der;.pem;.cert;.p7b;.p7c;.p12;.pfx</CertificateFileExtensions>
+	<ScanCertificateStores>true</ScanCertificateStores>
+	<MaxCertificateFileSizeKb>2048</MaxCertificateFileSizeKb>
+	<!-- Ключевые контейнеры КриптоПро (реестр, флешки, токены): проверяются агентом и в режиме «Этот ПК» -->
+	<ScanCryptoProContainers>true</ScanCryptoProContainers>
+	<!-- Пароли для .p12/.pfx задаются в панели и хранятся зашифрованными (DPAPI текущего пользователя) -->
+	<ProtectedPfxPasswords></ProtectedPfxPasswords>
+
+	<!-- Список ПК для сканирования (имена или IP-адреса) -->
+	<Hosts>
+		<Host>localhost</Host>
+	</Hosts>
+
+	<!-- Журнал: папка, срок хранения (сутки) и размер одного файла (МБ); 0 — без ограничения -->
+	<LogDirectory>logs</LogDirectory>
+	<LogRetentionDays>30</LogRetentionDays>
+	<LogMaxFileSizeMb>10</LogMaxFileSizeMb>
+</PanelConfig>

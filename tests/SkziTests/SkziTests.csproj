@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3C9A1F7B-0D2E-4B8A-9F61-7E4D2C5A8B33}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Skzi.Tests</RootNamespace>
+    <AssemblyName>SkziTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <LangVersion>5</LangVersion>
+    <CodePage>65001</CodePage>
+    <FileAlignment>512</FileAlignment>
+    <Prefer32Bit>false</Prefer32Bit>
+    <StartupObject>Skzi.Tests.TestProgram</StartupObject>
+    <OutputPath>..\..\bin\</OutputPath>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>pdbonly</DebugType>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Тестируемый код подключается исходниками (без AssemblyInfo проектов) -->
+    <Compile Include="..\..\src\Common\**\*.cs">
+      <Link>Common\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\..\src\SkziAgent\*.cs">
+      <Link>Agent\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="..\..\src\SkziControlPanel\*.cs">
+      <Link>ControlPanel\%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="TestProgram.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

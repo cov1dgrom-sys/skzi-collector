@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Release</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5B0D7C1E-6F43-4F3A-9A2E-1C7D0F8A3B11}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Skzi.Agent</RootNamespace>
+    <AssemblyName>SkziAgent</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <LangVersion>5</LangVersion>
+    <CodePage>65001</CodePage>
+    <FileAlignment>512</FileAlignment>
+    <Prefer32Bit>false</Prefer32Bit>
+    <ApplicationIcon>..\Assets\skzi.ico</ApplicationIcon>
+    <ApplicationManifest>..\Assets\app.manifest</ApplicationManifest>
+    <OutputPath>..\..\bin\</OutputPath>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Общий код (логирование, парсинг, сканирование, протокол, БД) подключается ссылками на файлы -->
+    <Compile Include="..\Common\**\*.cs">
+      <Link>Common\%(RecursiveDir)%(Filename)%(Extension)</Link>
+    </Compile>
+    <Compile Include="AgentServer.cs" />
+    <Compile Include="AgentWindowsService.cs" />
+    <Compile Include="BackgroundAgent.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="ServiceSetup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\config\agent.config.xml">
+      <Link>agent.config.xml</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Assets\app.manifest">
+      <Link>app.manifest</Link>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
